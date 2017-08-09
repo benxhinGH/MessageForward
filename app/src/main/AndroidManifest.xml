@@ -8,26 +8,26 @@
 
 
     <application
-        android:name=".MyApplication"
+        android:name=".other.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".MonitorNumberActivity"/>
-        <activity android:name=".ForwardNumberActivity"/>
+        <activity android:name=".activity.MonitorNumberActivity"/>
+        <activity android:name=".activity.ForwardNumberActivity"/>
 
 
-        <service android:name=".MonitorService"/>
+        <service android:name=".service.MonitorService"/>
 
-        <receiver android:name=".MessageSendResReceiver">
+        <receiver android:name=".receiver.MessageSendResReceiver">
             <intent-filter>
                 <action android:name="com.usiellau.messageforward.SENT_MSG_ACTION"/>
             </intent-filter>

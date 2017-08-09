@@ -1,4 +1,4 @@
-package com.usiellau.messageforward;
+package com.usiellau.messageforward.receiver;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.usiellau.messageforward.other.Util;
 
 /**
  * Created by Administrator on 2017/8/9 0009.

@@ -1,4 +1,4 @@
-package com.usiellau.messageforward;
+package com.usiellau.messageforward.model;
 
 /**
  * Created by Administrator on 2017/8/9 0009.

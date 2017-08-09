@@ -1,4 +1,4 @@
-package com.usiellau.messageforward;
+package com.usiellau.messageforward.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

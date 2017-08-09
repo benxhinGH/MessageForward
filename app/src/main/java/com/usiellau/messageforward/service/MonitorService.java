@@ -1,26 +1,27 @@
-package com.usiellau.messageforward;
+package com.usiellau.messageforward.service;
 
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.telephony.SmsManager;
-import android.telephony.SubscriptionInfo;
-import android.telephony.SubscriptionManager;
 import android.util.Log;
 
-import java.lang.reflect.Field;
+import com.usiellau.messageforward.R;
+import com.usiellau.messageforward.other.Util;
+import com.usiellau.messageforward.activity.MainActivity;
+import com.usiellau.messageforward.database.DBUtil;
+import com.usiellau.messageforward.model.MyMessage;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,7 +92,7 @@ public class MonitorService extends Service {
 
         public List<MyMessage> getMonitorMsgFromPhone(){
             List<MyMessage> res=new ArrayList<>();
-            List<String> monitorNumber=DBUtil.queryMonitorNumber();
+            List<String> monitorNumber= DBUtil.queryMonitorNumber();
             ContentResolver contentResolver=getContentResolver();
             String[] projection=new String[]{"address","body"};
             Cursor cursor=contentResolver.query(SMS_INBOX,projection,"read=?",new String[]{"0"},"date desc");

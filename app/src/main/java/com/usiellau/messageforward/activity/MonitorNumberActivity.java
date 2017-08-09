@@ -1,9 +1,7 @@
-package com.usiellau.messageforward;
+package com.usiellau.messageforward.activity;
 
-import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,6 +16,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+
+import com.usiellau.messageforward.database.DBUtil;
+import com.usiellau.messageforward.adapter.NumberRvAdapter;
+import com.usiellau.messageforward.R;
+import com.usiellau.messageforward.other.Util;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.usiellau.messageforward;
+package com.usiellau.messageforward.other;
 
 import android.app.Application;
 import android.content.Context;

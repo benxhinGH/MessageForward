@@ -1,12 +1,13 @@
-package com.usiellau.messageforward;
+package com.usiellau.messageforward.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.usiellau.messageforward.R;
 
 import java.util.List;
 
@@ -78,7 +79,7 @@ public class NumberRvAdapter extends RecyclerView.Adapter<NumberRvAdapter.MyView
         }
     }
 
-    interface OnItemClickListener{
+    public interface OnItemClickListener{
         void onItemClick(View view,int position);
         void onItemLongClick(View view,int position);
     }

@@ -1,4 +1,4 @@
-package com.usiellau.messageforward;
+package com.usiellau.messageforward.activity;
 
 import android.Manifest;
 import android.content.Intent;
@@ -17,6 +17,11 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
+import com.usiellau.messageforward.service.MonitorService;
+import com.usiellau.messageforward.R;
+import com.usiellau.messageforward.other.Util;
+import com.usiellau.messageforward.database.DBUtil;
 
 import java.util.List;
 
@@ -69,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
-                    List<String> monitorNumber=DBUtil.queryMonitorNumber();
+                    List<String> monitorNumber= DBUtil.queryMonitorNumber();
                     List<String> forwardNumber=DBUtil.queryForwardNumber();
                     if(monitorNumber.size()==0||forwardNumber.size()==0){
                         Toast.makeText(MainActivity.this, "监听号码或转发号码为空", Toast.LENGTH_SHORT).show();
