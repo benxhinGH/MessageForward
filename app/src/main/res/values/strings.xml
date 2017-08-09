@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">MessageForward</string>
+    <string name="msg_forward_close">短信转发已关闭</string>
+    <string name="msg_forward_open">短信转发已开启</string>
+    <string name="monitor_number_btn">监听号码</string>
+    <string name="forward_number_btn">转发号码</string>
+    <string name="add_number">添加号码</string>
+    <string name="dialog_add_number_et_hint">请输入要添加的号码</string>
+</resources>
