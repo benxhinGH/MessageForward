@@ -18,30 +18,30 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
-import com.usiellau.messageforward.database.DBUtil;
-import com.usiellau.messageforward.adapter.NumberRvAdapter;
 import com.usiellau.messageforward.R;
+import com.usiellau.messageforward.adapter.NumberRvAdapter;
+import com.usiellau.messageforward.database.DBUtil;
 import com.usiellau.messageforward.other.Util;
 
 import java.util.List;
 
 /**
- * Created by Administrator on 2017/8/8 0008.
+ * Created by Administrator on 2017/8/10 0010.
  */
 
-public class ForwardNumberActivity extends AppCompatActivity {
+public class ForwardEmailActivity extends AppCompatActivity {
 
-    private final String title="转发号码";
+    private final String title="转发邮箱";
 
     private Toolbar toolbar;
-    private RecyclerView forwardNumberRv;
-    private List<String> numberListData;
+    private RecyclerView forwardEmailRv;
+    private List<String> emailRvData;
     private NumberRvAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_forward_number);
+        setContentView(R.layout.activity_forward_email);
         findViews();
         toolbar.setTitle(title);
         setSupportActionBar(toolbar);
@@ -53,7 +53,7 @@ public class ForwardNumberActivity extends AppCompatActivity {
 
     private void findViews(){
         toolbar=(Toolbar)findViewById(R.id.toolbar);
-        forwardNumberRv=(RecyclerView) findViewById(R.id.number_rv);
+        forwardEmailRv=(RecyclerView) findViewById(R.id.email_rv);
     }
 
     private void setListeners(){
@@ -65,15 +65,15 @@ public class ForwardNumberActivity extends AppCompatActivity {
 
             @Override
             public void onItemLongClick(View view, int position) {
-                final String number=numberListData.get(position);
-                AlertDialog.Builder builder=new AlertDialog.Builder(ForwardNumberActivity.this);
+                final String email=emailRvData.get(position);
+                AlertDialog.Builder builder=new AlertDialog.Builder(ForwardEmailActivity.this);
                 builder.setTitle("提示");
-                builder.setMessage("确定删除转发号码"+number+"?");
+                builder.setMessage("确定删除转发邮箱"+email+"?");
                 builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        DBUtil.deleteForwardNumberByNumber(number);
-                        refreshNumberList();
+                        DBUtil.deleteForwardEmailByAddress(email);
+                        refreshEmailList();
                     }
                 });
                 builder.setNegativeButton("取消", null);
@@ -89,27 +89,27 @@ public class ForwardNumberActivity extends AppCompatActivity {
     }
 
     private void initViews(){
-        numberListData=DBUtil.queryForwardNumber();
+        emailRvData=DBUtil.queryForwardEmail();
         adapter=new NumberRvAdapter(this);
-        adapter.setData(numberListData);
-        forwardNumberRv.setAdapter(adapter);
-        forwardNumberRv.setLayoutManager(new LinearLayoutManager(this));
-        forwardNumberRv.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
-        forwardNumberRv.setItemAnimator(new DefaultItemAnimator());
+        adapter.setData(emailRvData);
+        forwardEmailRv.setAdapter(adapter);
+        forwardEmailRv.setLayoutManager(new LinearLayoutManager(this));
+        forwardEmailRv.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
+        forwardEmailRv.setItemAnimator(new DefaultItemAnimator());
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_forward_number,menu);
+        getMenuInflater().inflate(R.menu.menu_forward_email,menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.action_add_number:
-                showAddNumberDialog();
+            case R.id.action_add_email:
+                showAddEmailDialog();
                 break;
             default:
                 break;
@@ -117,30 +117,30 @@ public class ForwardNumberActivity extends AppCompatActivity {
         return true;
     }
 
-    private void showAddNumberDialog(){
+    private void showAddEmailDialog(){
         AlertDialog.Builder builder=new AlertDialog.Builder(this);
-        View view= LayoutInflater.from(this).inflate(R.layout.dialog_add_number,null);
-        final EditText editText=(EditText)view.findViewById(R.id.number_et);
-        builder.setTitle("添加转发号码");
+        View view= LayoutInflater.from(this).inflate(R.layout.dialog_add_email,null);
+        final EditText editText=(EditText)view.findViewById(R.id.email_et);
+        builder.setTitle("添加转发邮箱");
         builder.setView(view);
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String number=editText.getText().toString();
+                String address=editText.getText().toString();
                 SQLiteDatabase database=DBUtil.getWritableDatabase();
                 ContentValues values=new ContentValues();
-                values.put("number",number);
-                database.insert("number_forward",null,values);
-                refreshNumberList();
+                values.put("address",address);
+                database.insert("email_forward",null,values);
+                refreshEmailList();
             }
         });
         builder.setNegativeButton("取消",null);
         builder.show();
     }
 
-    private void refreshNumberList(){
-        List<String> temp=DBUtil.queryForwardNumber();
-        Util.listDataCopy(numberListData,temp);
+    private void refreshEmailList(){
+        List<String> temp=DBUtil.queryForwardEmail();
+        Util.listDataCopy(emailRvData,temp);
         adapter.notifyDataSetChanged();
     }
 }

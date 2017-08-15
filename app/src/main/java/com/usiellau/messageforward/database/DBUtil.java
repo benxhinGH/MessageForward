@@ -26,6 +26,14 @@ public class DBUtil {
         getWritableDatabase().delete("number_monitor","number=?",new String[]{number});
     }
 
+    public static void deleteForwardNumberByNumber(String number){
+        getWritableDatabase().delete("number_forward","number=?",new String[]{number});
+    }
+
+    public static void deleteForwardEmailByAddress(String address){
+        getWritableDatabase().delete("email_forward","address=?",new String[]{address});
+    }
+
     public static List<String> queryMonitorNumber(){
         List<String> res=new ArrayList<>();
         SQLiteDatabase database=getWritableDatabase();
@@ -55,6 +63,21 @@ public class DBUtil {
             do{
                 number=cursor.getString(cursor.getColumnIndex("number"));
                 res.add(number);
+            }while (cursor.moveToNext());
+            cursor.close();
+        }
+        return res;
+    }
+
+    public static List<String> queryForwardEmail(){
+        List<String> res=new ArrayList<>();
+        SQLiteDatabase database=getWritableDatabase();
+        Cursor cursor=database.query("email_forward",null,null,null,null,null,null);
+        if(cursor.moveToFirst()){
+            String address;
+            do{
+                address=cursor.getString(cursor.getColumnIndex("address"));
+                res.add(address);
             }while (cursor.moveToNext());
             cursor.close();
         }

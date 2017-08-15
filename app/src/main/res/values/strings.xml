@@ -5,5 +5,11 @@
     <string name="monitor_number_btn">监听号码</string>
     <string name="forward_number_btn">转发号码</string>
     <string name="add_number">添加号码</string>
+    <string name="add_email_action_title">添加email</string>
     <string name="dialog_add_number_et_hint">请输入要添加的号码</string>
+    <string name="dialog_add_email_et_hint">请输入要添加的邮箱地址</string>
+    <string name="forward_email_btn">转发邮箱</string>
+    <string name="setting_btn">设置</string>
+    <string name="number_forward_switch">号码转发</string>
+    <string name="email_forward_switch">邮箱转发</string>
 </resources>

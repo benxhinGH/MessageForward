@@ -5,6 +5,9 @@
     <uses-permission android:name="android.permission.RECEIVE_SMS"/>
     <uses-permission android:name="android.permission.READ_SMS"/>
     <uses-permission android:name="android.permission.SEND_SMS"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
 
     <application
@@ -15,6 +18,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <!--activity-->
         <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -23,13 +27,21 @@
         </activity>
         <activity android:name=".activity.MonitorNumberActivity"/>
         <activity android:name=".activity.ForwardNumberActivity"/>
+        <activity android:name=".activity.ForwardEmailActivity"/>
+        <activity android:name=".activity.SettingActivity"/>
 
-
+        <!--service-->
         <service android:name=".service.MonitorService"/>
 
+        <!--receiver-->
         <receiver android:name=".receiver.MessageSendResReceiver">
             <intent-filter>
                 <action android:name="com.usiellau.messageforward.SENT_MSG_ACTION"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".receiver.BootCompleteReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
 

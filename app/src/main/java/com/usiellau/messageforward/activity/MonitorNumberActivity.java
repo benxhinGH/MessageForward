@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -44,6 +45,7 @@ public class MonitorNumberActivity extends AppCompatActivity {
         findViews();
         toolbar.setTitle(title);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initViews();
         setListeners();
 
@@ -78,6 +80,12 @@ public class MonitorNumberActivity extends AppCompatActivity {
                 builder.show();
             }
         });
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void initViews(){
@@ -87,6 +95,7 @@ public class MonitorNumberActivity extends AppCompatActivity {
         monitorNumberRv.setAdapter(adapter);
         monitorNumberRv.setLayoutManager(new LinearLayoutManager(this));
         monitorNumberRv.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
+        monitorNumberRv.setItemAnimator(new DefaultItemAnimator());
     }
 
 

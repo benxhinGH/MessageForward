@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"></android.support.v7.widget.Toolbar>
+    <Switch
+        android:id="@+id/number_forward_switch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/number_forward_switch"
+        android:layout_margin="10dp"/>
+    <Switch
+        android:id="@+id/email_forward_switch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="@string/email_forward_switch"/>
+
+</LinearLayout>

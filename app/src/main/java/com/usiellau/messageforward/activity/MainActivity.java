@@ -1,8 +1,10 @@
 package com.usiellau.messageforward.activity;
 
 import android.Manifest;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,6 +12,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,16 +34,18 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final String title="设置";
+    private final String title="短信转发Demo";
 
     private String[] permissions={Manifest.permission.RECEIVE_SMS,Manifest.permission.READ_SMS,
-    Manifest.permission.SEND_SMS};
+    Manifest.permission.SEND_SMS,Manifest.permission.INTERNET,Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
     private Toolbar toolbar;
 
     private ToggleButton msgFrdToggleBtn;
     private Button monitorNumberBtn;
     private Button forwardNumberBtn;
+    private Button forwardEmailBtn;
+    private Button settingBtn;
 
 
 
@@ -61,10 +66,12 @@ public class MainActivity extends AppCompatActivity {
         msgFrdToggleBtn=(ToggleButton)findViewById(R.id.msg_frd_toggle_btn);
         monitorNumberBtn=(Button)findViewById(R.id.monitor_number_btn);
         forwardNumberBtn=(Button)findViewById(R.id.forward_number_btn);
+        forwardEmailBtn=(Button)findViewById(R.id.forward_email_btn);
+        settingBtn=(Button)findViewById(R.id.setting_btn);
     }
 
     private void initState(){
-        if(Util.isServiceRunning(this,".MonitorService")){
+        if(Util.isServiceRunning(this,".service.MonitorService")){
             msgFrdToggleBtn.setChecked(true);
         }
     }
@@ -75,9 +82,8 @@ public class MainActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
                     List<String> monitorNumber= DBUtil.queryMonitorNumber();
-                    List<String> forwardNumber=DBUtil.queryForwardNumber();
-                    if(monitorNumber.size()==0||forwardNumber.size()==0){
-                        Toast.makeText(MainActivity.this, "监听号码或转发号码为空", Toast.LENGTH_SHORT).show();
+                    if(monitorNumber.size()==0){
+                        Toast.makeText(MainActivity.this, "监听号码为空", Toast.LENGTH_SHORT).show();
                         msgFrdToggleBtn.setChecked(false);
                     }else{
                         Intent intent=new Intent(MainActivity.this,MonitorService.class);
@@ -101,6 +107,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(MainActivity.this,ForwardNumberActivity.class);
+                startActivity(intent);
+            }
+        });
+        forwardEmailBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(MainActivity.this,ForwardEmailActivity.class);
+                startActivity(intent);
+            }
+        });
+        settingBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(MainActivity.this,SettingActivity.class);
                 startActivity(intent);
             }
         });

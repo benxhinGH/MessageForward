@@ -16,6 +16,9 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String CREATE_NUMBER_FORWARD="create table number_forward(" +
             "id integer primary key autoincrement," +
             "number text)";
+    public static final String CREATE_EMAIL_FORWARD="create table email_forward(" +
+            "id integer primary key autoincrement," +
+            "address text)";
 
 
     public DBHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
@@ -26,6 +29,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_NUMBER_MONITOR);
         db.execSQL(CREATE_NUMBER_FORWARD);
+        db.execSQL(CREATE_EMAIL_FORWARD);
     }
 
     @Override

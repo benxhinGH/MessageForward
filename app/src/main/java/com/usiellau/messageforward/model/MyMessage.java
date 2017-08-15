@@ -5,12 +5,23 @@ package com.usiellau.messageforward.model;
  */
 
 public class MyMessage {
+
+    private String id;
     private String address;
     private String body;
 
-    public MyMessage(String address, String body) {
+    public MyMessage(String id,String address, String body) {
+        this.id=id;
         this.address = address;
         this.body = body;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getAddress() {
