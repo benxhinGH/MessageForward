@@ -3,6 +3,7 @@ package com.usiellau.messageforward.activity;
 import android.Manifest;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -47,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
     private Button forwardEmailBtn;
     private Button settingBtn;
 
+    private SharedPreferences stateSp;
+
 
 
     @Override
@@ -71,8 +74,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initState(){
+        stateSp=getSharedPreferences("state",0);
         if(Util.isServiceRunning(this,".service.MonitorService")){
             msgFrdToggleBtn.setChecked(true);
+            SharedPreferences.Editor editor=stateSp.edit();
+            editor.putBoolean("serviceRunning",false);
+            editor.apply();
         }
     }
 
@@ -88,11 +95,13 @@ public class MainActivity extends AppCompatActivity {
                     }else{
                         Intent intent=new Intent(MainActivity.this,MonitorService.class);
                         startService(intent);
+                        stateSp.edit().putBoolean("serviceRunning",true).apply();
                     }
 
                 }else{
                     Intent intent=new Intent(MainActivity.this,MonitorService.class);
                     stopService(intent);
+                    stateSp.edit().putBoolean("serviceRunning",false).apply();
                 }
             }
         });

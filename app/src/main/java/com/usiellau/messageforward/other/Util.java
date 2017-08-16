@@ -25,10 +25,10 @@ public class Util {
         int defaultMaxNum=50;
         ActivityManager activityManager=(ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningServiceInfo> runningServiceInfos=activityManager.getRunningServices(defaultMaxNum);
-        for(ActivityManager.RunningServiceInfo runningServiceInfo:runningServiceInfos){
-            ComponentName componentName=runningServiceInfo.service;
-            Log.d("Utilities","服务包名："+componentName.getPackageName()+"服务类名："+componentName.getShortClassName());
-        }
+//        for(ActivityManager.RunningServiceInfo runningServiceInfo:runningServiceInfos){
+//            ComponentName componentName=runningServiceInfo.service;
+//            Log.d("Utilities","服务包名："+componentName.getPackageName()+"服务类名："+componentName.getShortClassName());
+//        }
         return runningServiceInfos;
     }
 

@@ -9,11 +9,21 @@ public class MyMessage {
     private String id;
     private String address;
     private String body;
+    private long dateSent;
 
-    public MyMessage(String id,String address, String body) {
+    public MyMessage(String id,String address, String body,long dateSent) {
         this.id=id;
         this.address = address;
         this.body = body;
+        this.dateSent=dateSent;
+    }
+
+    public long getDateSent() {
+        return dateSent;
+    }
+
+    public void setDateSent(long dateSent) {
+        this.dateSent = dateSent;
     }
 
     public String getId() {

@@ -19,6 +19,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.usiellau.messageforward.R;
+import com.usiellau.messageforward.controller.Forwarder;
 import com.usiellau.messageforward.network.EmailUtil;
 import com.usiellau.messageforward.network.SmsUtil;
 import com.usiellau.messageforward.activity.MainActivity;
@@ -40,8 +41,10 @@ public class MonitorService extends Service {
 
     private Uri SMS_INBOX=Uri.parse("content://sms/");
 
+    private Forwarder forwarder=Forwarder.getForwarder(this);
+
     private SmsObserver smsObserver;
-    private Handler handler=new Handler(){
+    public Handler handler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what){
@@ -93,15 +96,13 @@ public class MonitorService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
-    class SmsObserver extends ContentObserver{
+    @Override
+    public void onDestroy() {
+        forwarder.exit();
+        super.onDestroy();
+    }
 
-        private List<String> msgIdHaveForwarded=new ArrayList(){
-            @Override
-            public boolean add(Object o) {
-                Log.d(TAG,"添加"+o.toString()+"为已转发短信id");
-                return super.add(o);
-            }
-        };
+    class SmsObserver extends ContentObserver{
 
         /**
          * Creates a content observer.
@@ -114,19 +115,24 @@ public class MonitorService extends Service {
 
         @Override
         public void onChange(boolean selfChange) {
-            Log.d(TAG,"onChange.............selfChange:"+selfChange);
+            //Log.d(TAG,"onChange.............selfChange:"+selfChange);
             super.onChange(selfChange);
-            MyMessage myMessage=getMonitorMsgFromPhone();
+            final MyMessage myMessage=getMonitorMsgFromPhone();
             if(myMessage==null)return;
-            Log.d(TAG,"查出符合转发条件的短信id为"+myMessage.getId()+"\n内容为："+myMessage.getBody());
+            //Log.d(TAG,"查出符合转发条件的短信id为"+myMessage.getId()+"\n内容为："+myMessage.getBody());
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    forwarder.forwardMessage(myMessage);
+                }
+            }).start();
 
-            forwardMessage(myMessage);
         }
 
         public MyMessage getMonitorMsgFromPhone(){
             List<String> monitorNumber= DBUtil.queryMonitorNumber();
             ContentResolver contentResolver=getContentResolver();
-            String[] projection=new String[]{"_id","address","body","read"};
+            String[] projection=new String[]{"_id","address","body","read","date_sent"};
             Cursor cursor=contentResolver.query(SMS_INBOX,projection,null,null,"date desc limit 1");
             if(cursor==null)return null;
             if(cursor.moveToFirst()){
@@ -134,89 +140,18 @@ public class MonitorService extends Service {
                 String address=cursor.getString(cursor.getColumnIndex("address"));
                 String body=cursor.getString(cursor.getColumnIndex("body"));
                 String read=cursor.getString(cursor.getColumnIndex("read"));
-                if(monitorNumber.contains(address)&&!msgIdHaveForwarded.contains(id)&&read.equals("0")){
-                    return new MyMessage(id,address,body);
+                long dateSent=cursor.getLong(cursor.getColumnIndex("date_sent"));
+                if(monitorNumber.contains(address)&&read.equals("0")){
+                    cursor.close();
+                    return new MyMessage(id,address,body,dateSent);
                 }
-                cursor.close();
             }
+            cursor.close();
             return null;
         }
 
-        public void forwardMessage(MyMessage message){
-
-            SharedPreferences setting=getSharedPreferences("setting",0);
-            if(setting.getBoolean("number_forward",false)){
-                numberForward(message);
-            }
-            if(setting.getBoolean("email_forward",false)){
-                emailForward(message);
-            }
-        }
-
-        public void numberForward(MyMessage message){
-            List<String> forwardNumber=DBUtil.queryForwardNumber();
-            if(forwardNumber.size()==0)return;
-            sendMessage(forwardNumber,message);
-
-        }
-
-        public void emailForward(MyMessage message){
-            List<String> addresses=DBUtil.queryForwardEmail();
-            if(addresses.size()==0)return;
-            final String msgId=message.getId();
-            final String msgAddress=message.getAddress();
-            final String msgBody=message.getBody();
-            final String[] addressArr=addresses.toArray(new String[addresses.size()]);
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        Log.d(TAG,"转发id为："+msgId+"的短信");
-                        EmailUtil.sendTextEmail(addressArr,"转发来自："+msgAddress+"的信息",msgBody);
-                        msgIdHaveForwarded.add(msgId);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        Message message=new Message();
-                        message.what=0;
-                        handler.sendMessage(message);
-                    }
-                }
-            }).start();
-
-
-        }
-
-        public void sendMessage(List<String> forwardNumber, final MyMessage myMessage){
-            if(DEBUG){
-                Message message=new Message();
-                message.what=1;
-                handler.sendMessage(message);
-                msgIdHaveForwarded.add(myMessage.getId());
-                return;
-            }
-            String tempMobiles="";
-            for(String number:forwardNumber){
-                tempMobiles+=number+",";
-            }
-            final String mobiles=tempMobiles.substring(0,tempMobiles.length()-1);
-
-            Log.d(TAG,"发送消息，号码："+mobiles+"内容："+myMessage.getBody());
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    boolean res=SmsUtil.sendSms(mobiles,SmsUtil.templateId,"pwd",myMessage.getBody());
-                    Message message=new Message();
-                    if(res){
-                        message.what=1;
-                        msgIdHaveForwarded.add(myMessage.getId());
-                    }else {
-                        message.what=2;
-                    }
-                    handler.sendMessage(message);
-                }
-            }).start();
-        }
 
 
     }
+
 }
